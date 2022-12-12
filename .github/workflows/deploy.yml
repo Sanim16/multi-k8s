@@ -47,8 +47,8 @@ jobs:
     - name: Push Images to Docker Hub
       run: |-
           echo Pushing production Images to Docker Hub
-          docker push -t sanim16/multi-client
-          docker push -t sanim16/multi-nginx
-          docker push -t sanim16/multi-server
-          docker push -t sanim16/multi-worker
+          docker push sanim16/multi-client
+          docker push sanim16/multi-nginx
+          docker push sanim16/multi-server
+          docker push sanim16/multi-worker
           echo built images
