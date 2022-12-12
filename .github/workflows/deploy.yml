@@ -1,14 +1,14 @@
 name: Deploy to AWS EBS
 
-env:
-  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#env:
+  #AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   #DEPLOY_PACKAGE_NAME: ${{ secrets. }}
-  DEPLOY_PACKAGE_NAME: deploy.zip
-  AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
-  EB_APPLICATION_NAME: ${{ secrets.EB_APPLICATION_NAME }}
-  EB_APP_ENV_NAME: ${{ secrets.EB_APP_ENV_NAME }}
-  AWS_REGION_NAME: ${{ secrets.AWS_REGION_NAME }}
+  #DEPLOY_PACKAGE_NAME: deploy.zip
+  #AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
+  #EB_APPLICATION_NAME: ${{ secrets.EB_APPLICATION_NAME }}
+  #EB_APP_ENV_NAME: ${{ secrets.EB_APP_ENV_NAME }}
+  #AWS_REGION_NAME: ${{ secrets.AWS_REGION_NAME }}
 
 on:
   push:
@@ -34,8 +34,13 @@ jobs:
     - name: Post test build
       run: |-
           echo Building production Images
-          docker build -e CI=true ./client -t sanim16/multi-client
-          docker build -e CI=true ./nginx -t sanim16/multi-nginx
-          docker build -e CI=true ./server -t sanim16/multi-server
-          docker build -e CI=true ./worker -t sanim16/multi-worker
+          docker build ./client -t sanim16/multi-client
+          docker build ./nginx -t sanim16/multi-nginx
+          docker build ./server -t sanim16/multi-server
+          docker build ./worker -t sanim16/multi-worker
           echo built images
+    - name: Log in to Docker Hub
+      uses: docker/login-action@V2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
