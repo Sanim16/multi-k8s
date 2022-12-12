@@ -1,0 +1,38 @@
+name: Deploy to AWS EBS
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #DEPLOY_PACKAGE_NAME: ${{ secrets. }}
+  DEPLOY_PACKAGE_NAME: deploy.zip
+  AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
+  EB_APPLICATION_NAME: ${{ secrets.EB_APPLICATION_NAME }}
+  EB_APP_ENV_NAME: ${{ secrets.EB_APP_ENV_NAME }}
+  AWS_REGION_NAME: ${{ secrets.AWS_REGION_NAME }}
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build and test the Docker image
+      run: |-
+          echo Building Image and running Tests
+          docker build ./client --file ./client/Dockerfile.dev --tag sanim16/multi-docker-react
+          docker run -e CI=true sanim16/multi-docker-react npm run test -- --coverage
+          echo Finished running tests successfully
+      #working-directory: ./ ##not required as docker command is setup to run in the specific directory
+    - name: Post test build
+      run: |-
+          echo Building production Images
+          docker build ./client -t sanim16/multi-client
+          docker build ./nginx -t sanim16/multi-nginx
