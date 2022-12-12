@@ -36,3 +36,6 @@ jobs:
           echo Building production Images
           docker build ./client -t sanim16/multi-client
           docker build ./nginx -t sanim16/multi-nginx
+          docker build ./server -t sanim16/multi-server
+          docker build ./worker -t sanim16/multi-worker
+          echo built images
