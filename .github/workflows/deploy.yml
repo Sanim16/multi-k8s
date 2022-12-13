@@ -34,10 +34,10 @@ jobs:
     - name: Post test build
       run: |-
           echo Building production Images
-          docker build ./client -t sanim16/multi-client:${{ github.sha }}
-          docker build ./nginx -t sanim16/multi-nginx:${{ github.sha }}
-          docker build ./server -t sanim16/multi-server:${{ github.sha }}
-          docker build ./worker -t sanim16/multi-worker:${{ github.sha }}
+          docker build ./client -t sanim16/multi-client
+          docker build ./nginx -t sanim16/multi-nginx
+          docker build ./server -t sanim16/multi-server
+          docker build ./worker -t sanim16/multi-worker
           echo built images
     - name: Log in to Docker Hub
       uses: docker/login-action@v2
@@ -47,10 +47,10 @@ jobs:
     - name: Push Images to Docker Hub
       run: |-
           echo Pushing production Images to Docker Hub
-          docker push sanim16/multi-client:${{ github.sha }}
-          docker push sanim16/multi-nginx:${{ github.sha }}
-          docker push sanim16/multi-server:${{ github.sha }}
-          docker push sanim16/multi-worker:${{ github.sha }}
+          docker push sanim16/multi-client
+          docker push sanim16/multi-nginx
+          docker push sanim16/multi-server
+          docker push sanim16/multi-worker
           echo built images
   deploy-to-elasticbeanstalk:
     runs-on: ubuntu-latest
